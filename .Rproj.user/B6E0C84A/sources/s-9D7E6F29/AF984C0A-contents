@@ -136,7 +136,7 @@ destination <- ggplot() +
   theme(legend.position = "bottom") +
   coord_equal() 
 
-ggsave(destination, file = "output/destination.png", width = 25, height = 20, units = "cm")  
+ggsave(destination, file = "output/destination.png", width = 25, height = 20, bg = "white", units = "cm")  
 
 # https://pjbartlein.github.io/REarthSysSci/netCDF.html
 
