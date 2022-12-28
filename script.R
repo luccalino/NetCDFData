@@ -68,9 +68,7 @@ length(na.omit(as.vector(tmp_array[,,1])))
 m <- 8
 tmp_slice <- tmp_array[,,m]
 
-png(file = "output/origin.png")
 image(lon,lat,tmp_slice, col=rev(brewer.pal(10,"RdBu")))
-dev.off()
 
 # levelplot of the slice
 grid <- expand.grid(lon=lon, lat=lat)
@@ -129,7 +127,7 @@ muniShape$meanSun <- meanSun$mat[match(muniShape$BFS_NUMMER, meanSun$BFS_NUMMER)
 shp_df <- broom::tidy(muniShape, region = "meanSun")
 shp_df$id <- as.numeric(shp_df$id)
 
-map <- ggplot() + 
+destination <- ggplot() + 
   geom_polygon(data = shp_df, 
                aes(x = long, y = lat, group = group, fill = id), 
                colour = "black", size = 0.25) + 
@@ -137,9 +135,8 @@ map <- ggplot() +
   theme_void() +
   theme(legend.position = "bottom") +
   coord_equal() 
-#map 
 
-ggsave(map, file = "output/destination.png", width = 25, height = 20, units = "cm")  
+ggsave(destination, file = "output/destination.png", width = 25, height = 20, bg = "white", units = "cm")  
 
 # https://pjbartlein.github.io/REarthSysSci/netCDF.html
 
