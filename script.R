@@ -64,7 +64,7 @@ tmp_array[tmp_array==fillvalue$value] <- NA
 
 length(na.omit(as.vector(tmp_array[,,1])))
 
-# get a single slice or layer (January)
+# get a single slice or layer (August)
 m <- 8
 tmp_slice <- tmp_array[,,m]
 
@@ -130,7 +130,7 @@ shp_df$id <- as.numeric(shp_df$id)
 destination <- ggplot() + 
   geom_polygon(data = shp_df, 
                aes(x = long, y = lat, group = group, fill = id), 
-               colour = "black", size = 0.25) + 
+               colour = NA, size = 0.25) + 
   scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible", low = "blue", mid = "white", high = "red", midpoint = mean(shp_df$id)) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -140,6 +140,19 @@ ggsave(destination, file = "output/destination.png", width = 25, height = 20, bg
 
 # https://pjbartlein.github.io/REarthSysSci/netCDF.html
 
+# BFS to PLZ4
+muniShape_df <- data.frame(muniShape)
+muniShape_df$BFS_NUMMER <- as.numeric(muniShape_df$BFS_NUMMER)
+muniShape_df <- muniShape_df %>%
+  filter(GEM_TEIL < 2) %>%
+  select(BFS_NUMMER, NAME, meanSun)
 
+plz_to_bfs <- read_excel("data/plz_to_bfs.xlsx", sheet = "PLZ4")
 
+merged_df <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER")
 
+merged_df <- merged_df %>%
+  group_by(PLZ4) %>%
+  summarise(meanSun = mean(meanSun))
+
+save(merged_df, file = "plz_data.RData")
