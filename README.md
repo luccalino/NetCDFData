@@ -5,4 +5,4 @@ In visual terms it converts from cells as shown below...
 ![origin](/output/origin.png)
 
 ... to means per region, here Swiss municipalities as shown below\
-![destination](/output/destination.png)}
+![destination](/output/destination.png)
