@@ -1,0 +1,40 @@
+Climate normals sunshine duration 1961-1990  
+
+Download URL NetCDF (LV95)
+ Mean yearly sunshine duration
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/netcdf/2056/SnormY6190_ch01r.swiss.lv95_000001010000_000001010000.nc
+ Mean monthly sunshine duration
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/netcdf/2056/SnormM6190_ch01r.swiss.lv95_000001010000_000012010000.nc
+
+Download URL geotiff (LV95)
+ Mean yearly sunshine duration
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormY6190_ch01r.swiss.lv95_10000101000000.tif
+ Mean monthly sunshine duration
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000101000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000201000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000301000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000401000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000501000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000601000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000701000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000801000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10000901000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10001001000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10001101000000.tif
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/tif/2056/SnormM6190_ch01r.swiss.lv95_10001201000000.tif
+Color legends:
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/info/Snorm_E.png
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/info/Snorm_F.png
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/info/Snorm_G.png
+   https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/info/Snorm_I.png
+   
+   
+   
+
+ 
+
+
+
+
+
+
