@@ -121,7 +121,8 @@ tmp_df02 <- tmp_df02 %>%
 dfr2 <- rasterFromXYZ(tmp_df02)  
 
 # Calculate mean per municipality
-meanSun <- raster::extract(dfr2, muniShape, weights = FALSE, df = TRUE, fun = mean)
+sumStats <- function(x, na.rm) c(mean = mean(x, na.rm = na.rm))
+meanSun <- raster::extract(dfr2, muniShape, weights = FALSE, df = TRUE, fun = sumStats)
 meanSun$BFS_NUMMER <- as.numeric(muniShape$BFS_NUMMER)
 
 muniShape$meanSun <- meanSun$mat[match(muniShape$BFS_NUMMER, meanSun$BFS_NUMMER)]
@@ -133,7 +134,7 @@ shp_df$id <- as.numeric(shp_df$id)
 destination <- ggplot() + 
   geom_polygon(data = shp_df, 
                aes(x = long, y = lat, group = group, fill = id), 
-               colour = NA, size = 0.25) + 
+               colour = "lightgrey", size = 0.05) + 
   scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible", low = "blue", mid = "white", high = "red", midpoint = mean(shp_df$id)) +
   theme_void() +
   theme(legend.position = "bottom") +
@@ -170,6 +171,7 @@ lat <- ncvar_get(nc, "chy")
 
 ## Get time
 time <- ncvar_get(nc,"time")
+nt <- dim(time)
 tunits <- ncatt_get(nc,"time","units")
 
 ## Get variable of interest
@@ -251,7 +253,7 @@ tmp_df02 <- tmp_df02 %>%
 dfr2 <- rasterFromXYZ(tmp_df02)  
 
 # Calculate mean per municipality
-meanHail <- raster::extract(dfr2, muniShape, weights = FALSE, df = TRUE, fun = mean)
+meanHail <- raster::extract(dfr2, muniShape, weights = FALSE, df = TRUE, fun = sumStats)
 meanHail$BFS_NUMMER <- as.numeric(muniShape$BFS_NUMMER)
 
 muniShape$meanHail <- meanHail$mat[match(muniShape$BFS_NUMMER, meanHail$BFS_NUMMER)]
@@ -263,8 +265,8 @@ shp_df$id <- as.numeric(shp_df$id)
 destination <- ggplot() + 
   geom_polygon(data = shp_df, 
                aes(x = long, y = lat, group = group, fill = id), 
-               colour = NA, size = 0.25) + 
-  scale_fill_gradient2(name = "Mean yearly hail days between 2002-2022", low = "blue", mid = "white", high = "red", midpoint = mean(shp_df$id)) +
+               colour = "lightgrey", size = 0.05) + 
+  scale_fill_gradient2(name = "Mean yearly hail days between 2002-2022", low = "white", high = "red", midpoint = mean(shp_df$id)) +
   theme_void() +
   theme(legend.position = "bottom") +
   coord_equal() 
@@ -284,7 +286,9 @@ merged_df <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER"
 
 merged_df <- merged_df %>%
   group_by(PLZ4) %>%
-  summarise(meanHail = mean(meanHail))
+  summarise(meanHail = mean(meanHail, na.rm = TRUE))
+
+merged_df$meanHail <- ifelse(is.na(merged_df$meanHail),0,merged_df$meanHail)
 
 save(merged_df, file = "plz_data_hail.RData")
 
