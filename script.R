@@ -16,6 +16,9 @@ muniShape <- readOGR("data/swissBOUNDARIES3D_1_3_TLM_HOHEITSGEBIET.shp")
 #  geom_polygon(data = muniShape, aes(x = long, y = lat, group = group), 
 #               colour = "black", fill = NA)
 
+# Country data
+country_data <- st_read("data/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp")
+
 # Sunshine data #######################################################
 
 # NetCDF data
@@ -132,15 +135,16 @@ shp_df <- broom::tidy(muniShape, region = "meanSun")
 shp_df$id <- as.numeric(shp_df$id)
 
 destination <- ggplot() + 
+  geom_sf(data = subset(country_data, NAME == "Schweiz"), alpha = 0.5, color = "darkgrey", size = 0.5) +
   geom_polygon(data = shp_df, 
                aes(x = long, y = lat, group = group, fill = id), 
                colour = "lightgrey", size = 0.05) + 
-  scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible", low = "blue", mid = "white", high = "red", midpoint = mean(shp_df$id)) +
+  scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible (%)", low = "blue", mid = "white", high = "red", midpoint = mean(shp_df$id)) +
   theme_void() +
   theme(legend.position = "bottom") +
-  coord_equal() 
+  coord_sf() 
 
-ggsave(destination, file = "output/destination.png", width = 25, height = 20, bg = "white", units = "cm")  
+ggsave(destination, file = "output/destination_sun.png", width = 25, height = 20, bg = "white", units = "cm")  
 
 # BFS to PLZ4
 muniShape_df <- data.frame(muniShape)
@@ -151,13 +155,13 @@ muniShape_df <- muniShape_df %>%
 
 plz_to_bfs <- read_excel("data/plz_to_bfs.xlsx", sheet = "PLZ4")
 
-merged_df <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER")
+sunshine_data <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER")
 
-merged_df <- merged_df %>%
+sunshine_data <- sunshine_data %>%
   group_by(PLZ4) %>%
   summarise(meanSun = mean(meanSun))
 
-save(merged_df, file = "plz_data.RData")
+save(sunshine_data, file = "plz_data_sunshine.RData")
 
 # Hail data ############################################################
 
@@ -197,7 +201,7 @@ tmp_array[tmp_array==fillvalue$value] <- NA
 
 length(na.omit(as.vector(tmp_array[,,1])))
 
-# get a single slice or layer (August)
+# get a single slice or layer (2009)
 m <- 8
 tmp_slice <- tmp_array[,,m]
 
@@ -253,6 +257,7 @@ tmp_df02 <- tmp_df02 %>%
 dfr2 <- rasterFromXYZ(tmp_df02)  
 
 # Calculate mean per municipality
+muniShape <- readOGR("data/swissBOUNDARIES3D_1_3_TLM_HOHEITSGEBIET.shp")
 meanHail <- raster::extract(dfr2, muniShape, weights = FALSE, df = TRUE, fun = sumStats)
 meanHail$BFS_NUMMER <- as.numeric(muniShape$BFS_NUMMER)
 
@@ -263,13 +268,14 @@ shp_df <- broom::tidy(muniShape, region = "meanHail")
 shp_df$id <- as.numeric(shp_df$id)
 
 destination <- ggplot() + 
+  geom_sf(data = subset(country_data, NAME == "Schweiz"), alpha = 0.5, fill = NA, color = "darkgrey", size = 0.5) +
   geom_polygon(data = shp_df, 
                aes(x = long, y = lat, group = group, fill = id), 
                colour = "lightgrey", size = 0.05) + 
   scale_fill_gradient2(name = "Mean yearly hail days between 2002-2022", low = "white", high = "red", midpoint = mean(shp_df$id)) +
   theme_void() +
   theme(legend.position = "bottom") +
-  coord_equal() 
+  coord_sf() 
 
 ggsave(destination, file = "output/destination_hail.png", width = 25, height = 20, bg = "white", units = "cm")  
 
@@ -282,13 +288,13 @@ muniShape_df <- muniShape_df %>%
 
 plz_to_bfs <- read_excel("data/plz_to_bfs.xlsx", sheet = "PLZ4")
 
-merged_df <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER")
+hail_data <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER")
 
-merged_df <- merged_df %>%
+hail_data <- hail_data %>%
   group_by(PLZ4) %>%
   summarise(meanHail = mean(meanHail, na.rm = TRUE))
 
-merged_df$meanHail <- ifelse(is.na(merged_df$meanHail),0,merged_df$meanHail)
+hail_data$avg_haildays <- ifelse(is.na(merged_df$meanHail),0,merged_df$meanHail)
 
-save(merged_df, file = "plz_data_hail.RData")
+save(hail_data, file = "plz_data_hail.RData")
 

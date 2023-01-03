@@ -5,11 +5,11 @@ This repo contains material to aggregate/manipulate data from a NetCDF file (e.g
 
 In visual terms, the material here converts detailed data from cells that include measurements in 2 km grids as shown below...
 
-![origin](/output/origin.png)
+![origin](/output/origin_sun.png)
 
 ... to averages per region, here Swiss municipalities as shown below
 
-![destination](/output/destination.png)
+![destination](/output/destination_sun.png)
 
 The data comes from here: [https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/data.zip](https://data.geo.admin.ch/ch.meteoschweiz.klimanormwerte-sonnenscheindauer_1961_1990/data.zip)
 
