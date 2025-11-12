@@ -7,12 +7,12 @@ This repo contains material to aggregate/manipulate data from a NetCDF file (e.g
 ### 1. Required Packages
 
 The script uses the following R packages:
-raster, stars, ncdf4 — for handling raster and NetCDF data.
-sf — for vector spatial data (municipalities, country boundaries).
-tidyverse — for data manipulation and aggregation.
-chron — for handling date-time data from NetCDF files.
-lattice, RColorBrewer — for plotting grids and colors.
-readxl — for reading Excel mapping files.
+- raster, stars, ncdf4 — for handling raster and NetCDF data.
+- sf — for vector spatial data (municipalities, country boundaries).
+- tidyverse — for data manipulation and aggregation.
+- chron — for handling date-time data from NetCDF files.
+- lattice, RColorBrewer — for plotting grids and colors.
+- readxl — for reading Excel mapping files.
 
 ### 2. Spatial Data Loading
 
@@ -56,3 +56,5 @@ Note: The original graph shows hail days from the year 2009, while the aggregate
 
 The data comes from here [https://data.geo.admin.ch/ch.meteoschweiz.klima/hageltage/Swiss-hail-climatology_haildays.zip](https://data.geo.admin.ch/ch.meteoschweiz.klima/hageltage/Swiss-hail-climatology_haildays.zip) or here [https://www.geocat.ch/geonetwork/srv/eng/catalog.search#/metadata/40cdcddd-8bf0-4cfd-ac1e-6e4683fb0176](https://www.geocat.ch/geonetwork/srv/eng/catalog.search#/metadata/40cdcddd-8bf0-4cfd-ac1e-6e4683fb0176).
 
+## Other datasets
+Rich additional spatial datasets can be found here: [https://data.geo.admin.ch/](https://data.geo.admin.ch/).
