@@ -1,25 +1,24 @@
+# Packages #####################################################################
 library(raster)
-library(rgdal)
 library(sf)
 library(tidyverse)
-library(ncdf4) # package for netcdf manipulation
+library(ncdf4) 
 library(stars)
 library(chron)
 library(lattice)
 library(RColorBrewer)
 library(readxl)
 
-# Municipality data
-muniShape <- readOGR("data/swissBOUNDARIES3D_1_3_TLM_HOHEITSGEBIET.shp")
+# Municipality and district data ###############################################
 
-#ggplot() + 
-#  geom_polygon(data = muniShape, aes(x = long, y = lat, group = group), 
-#               colour = "black", fill = NA)
+# Municipality data
+muniShape <- st_read("data/swissBOUNDARIES3D_1_3_TLM_HOHEITSGEBIET.shp")
+muniShape <- sf::st_zm(muniShape, drop = TRUE, what = "ZM")
 
 # Country data
 country_data <- st_read("data/swissBOUNDARIES3D_1_3_TLM_LANDESGEBIET.shp")
 
-# Sunshine data #######################################################
+# Sunshine data ################################################################
 
 # NetCDF data
 ## Open connection
@@ -130,16 +129,11 @@ meanSun$BFS_NUMMER <- as.numeric(muniShape$BFS_NUMMER)
 
 muniShape$meanSun <- meanSun$mat[match(muniShape$BFS_NUMMER, meanSun$BFS_NUMMER)]
 
-# Test plot
-shp_df <- broom::tidy(muniShape, region = "meanSun")
-shp_df$id <- as.numeric(shp_df$id)
-
+# Plot
 destination <- ggplot() + 
   geom_sf(data = subset(country_data, NAME == "Schweiz"), alpha = 0.5, color = "darkgrey", size = 0.5) +
-  geom_polygon(data = shp_df, 
-               aes(x = long, y = lat, group = group, fill = id), 
-               colour = "lightgrey", size = 0.05) + 
-  scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible (%)", low = "blue", mid = "white", high = "red", midpoint = mean(shp_df$id)) +
+  geom_sf(data = muniShape, aes(fill = meanSun), colour = "lightgrey", size = 0.05) +
+  scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible (%)", low = "blue", mid = "white", high = "red", midpoint = mean(muniShape$meanSun)) +
   theme_void() +
   theme(legend.position = "bottom") +
   coord_sf() 
@@ -163,7 +157,7 @@ sunshine_data <- sunshine_data %>%
 
 save(sunshine_data, file = "plz_data_sunshine.RData")
 
-# Hail data ############################################################
+# Hail data ####################################################################
 
 # NetCDF data
 ## Open connection
@@ -253,26 +247,25 @@ head(na.omit(tmp_df02))
 tmp_df02 <- tmp_df02 %>%
   select(lon, lat, mat)
 
+tmp_df02 <- tmp_df02 %>%
+  mutate(mat = ifelse(is.na(mat), 0, mat))
+
 ### Make data frame
 dfr2 <- rasterFromXYZ(tmp_df02)  
 
 # Calculate mean per municipality
-muniShape <- readOGR("data/swissBOUNDARIES3D_1_3_TLM_HOHEITSGEBIET.shp")
+muniShape <- st_read("data/swissBOUNDARIES3D_1_3_TLM_HOHEITSGEBIET.shp")
+muniShape <- sf::st_zm(muniShape, drop = TRUE, what = "ZM")
 meanHail <- raster::extract(dfr2, muniShape, weights = FALSE, df = TRUE, fun = sumStats)
 meanHail$BFS_NUMMER <- as.numeric(muniShape$BFS_NUMMER)
 
 muniShape$meanHail <- meanHail$mat[match(muniShape$BFS_NUMMER, meanHail$BFS_NUMMER)]
 
-# Test plot
-shp_df <- broom::tidy(muniShape, region = "meanHail")
-shp_df$id <- as.numeric(shp_df$id)
-
+# Plot
 destination <- ggplot() + 
   geom_sf(data = subset(country_data, NAME == "Schweiz"), alpha = 0.5, fill = NA, color = "darkgrey", size = 0.5) +
-  geom_polygon(data = shp_df, 
-               aes(x = long, y = lat, group = group, fill = id), 
-               colour = "lightgrey", size = 0.05) + 
-  scale_fill_gradient2(name = "Mean yearly hail days between 2002-2022", low = "white", high = "red", midpoint = mean(shp_df$id)) +
+  geom_sf(data = muniShape, aes(fill = meanHail), colour = "lightgrey", size = 0.05) +
+  scale_fill_gradient2(name = "Mean yearly hail days between 2002-2022", low = "white", high = "red", midpoint = mean(muniShape$meanHail, na.rm = TRUE)) +
   theme_void() +
   theme(legend.position = "bottom") +
   coord_sf() 
@@ -293,8 +286,6 @@ hail_data <- merge(plz_to_bfs, muniShape_df, by.x = "GDENR", by.y = "BFS_NUMMER"
 hail_data <- hail_data %>%
   group_by(PLZ4) %>%
   summarise(meanHail = mean(meanHail, na.rm = TRUE))
-
-hail_data$avg_haildays <- ifelse(is.na(merged_df$meanHail),0,merged_df$meanHail)
 
 save(hail_data, file = "plz_data_hail.RData")
 
