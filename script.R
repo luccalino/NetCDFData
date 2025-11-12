@@ -133,7 +133,7 @@ muniShape$meanSun <- meanSun$mat[match(muniShape$BFS_NUMMER, meanSun$BFS_NUMMER)
 destination <- ggplot() + 
   geom_sf(data = subset(country_data, NAME == "Schweiz"), alpha = 0.5, color = "darkgrey", size = 0.5) +
   geom_sf(data = muniShape, aes(fill = meanSun), colour = "lightgrey", size = 0.05) +
-  scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1991-2020 relative to max possible (%)", low = "blue", mid = "white", high = "red", midpoint = mean(muniShape$meanSun)) +
+  scale_fill_gradient2(name = "Mean sunshine duration from March to September from 1961-1990 relative to max possible (%)", low = "blue", mid = "white", high = "red", midpoint = mean(muniShape$meanSun)) +
   theme_void() +
   theme(legend.position = "bottom") +
   coord_sf() 
@@ -288,4 +288,3 @@ hail_data <- hail_data %>%
   summarise(meanHail = mean(meanHail, na.rm = TRUE))
 
 save(hail_data, file = "plz_data_hail.RData")
-
