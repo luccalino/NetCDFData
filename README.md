@@ -20,7 +20,7 @@ Municipality boundaries are loaded from a shapefile (muniShape) and Z/M dimensio
 
 ### 3. Sunshine Data Processing
 
-Opens a NetCDF file containing monthly sunshine data (SnormM6190) for Switzerland. Extracts: Coordinates (lon, lat), Time variable, Sunshine variable (tmp_array), Metadata (units, attributes, fill values)
+Opens a NetCDF file containing monthly sunshine data (SnormM6190) for Switzerland. Extracts: Coordinates (lon, lat), Time variable, Sunshine variable (tmp_array), Metadata (units, attributes, fill values).
 
 Converts fill values to NA to handle missing data. Extracts a single month slice (e.g., August) and visualizes it using image() and levelplot. Converts the raster array into a long-format data frame for all months.
 
